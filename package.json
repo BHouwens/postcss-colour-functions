@@ -1,6 +1,6 @@
 {
   "name": "postcss-colour-functions",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "PostCSS plugin with some useful, Sass-like colour functions",
   "author": "Byron Houwens",
   "license": "MIT",

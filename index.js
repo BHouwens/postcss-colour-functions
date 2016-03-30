@@ -19,7 +19,7 @@ function hexToRgb(hex) {
     } : null;
 }
 
-function stripRgb(rgb){
+function stripRgb(rgb) {
     return {
         r: rgb[0].replace('rgb(', ''),
         g: rgb[1].replace(' ', ''),
@@ -27,80 +27,82 @@ function stripRgb(rgb){
     }
 }
 
-function darkenColour(colour, amount){
+function darkenColour(colour, amount) {
     amount = amount.indexOf('%') != -1 ? parseFloat(amount.replace('%', '')) / 100 : parseFloat(amount);
-    return [parseFloat(colour['r'] * amount).toFixed(2), 
-            parseFloat(colour['g'] * amount).toFixed(2), 
-            parseFloat(colour['b'] * amount).toFixed(2)];
+    return [parseFloat(colour['r'] * amount).toFixed(2),
+        parseFloat(colour['g'] * amount).toFixed(2),
+        parseFloat(colour['b'] * amount).toFixed(2)];
 }
 
-function lightenColour(colour, amount){
+function lightenColour(colour, amount) {
     amount = amount.indexOf('%') != -1 ? parseFloat(amount.replace('%', '')) / 100 : parseFloat(amount);
-    return [parseFloat(colour['r'] + (amount * (255 - colour['r']))).toFixed(2), 
-            parseFloat(colour['g'] + (amount * (255 - colour['g']))).toFixed(2), 
-            parseFloat(colour['b'] + (amount * (255 - colour['b']))).toFixed(2)];
+    return [parseFloat(colour['r'] + (amount * (255 - colour['r']))).toFixed(2),
+        parseFloat(colour['g'] + (amount * (255 - colour['g']))).toFixed(2),
+        parseFloat(colour['b'] + (amount * (255 - colour['b']))).toFixed(2)];
 }
 
-function opacityColour(colour, amount){
+function opacityColour(colour, amount) {
     amount = amount.indexOf('%') != -1 ? parseFloat(amount.replace('%', '')) / 100 : parseFloat(amount);
-    return 'rgba('+colour['r']+','+colour['g']+','+colour['b']+','+amount+')';
+    return 'rgba(' + colour['r'] + ',' + colour['g'] + ',' + colour['b'] + ',' + amount + ')';
 }
- 
+
 module.exports = postcss.plugin('postcss-colour-functions', function myplugin(options) {
- 
-    return function (css) {
- 
+
+    return function(css) {
+
         options = options || {};
-         
-        css.walkRules(function(rule){
-            rule.walkDecls(function(decl, i){
-                var val = decl.value,
-                    colour,
-                    amount,
-                    requestedFunction,
-                    newVal;
-                
-                console.log(functions);
-                
-                for (var i = 0; i < functions.length; i++){
-                    if (val.indexOf(functions[i] + '(') != -1){
-                        console.log('value', val);
-                        console.log('function', functions[i]);
-                        requestedFunction = { 
-                            'function' : functions[i],
-                            'request': val.match(/\([\(\)\.\#\,\s\%a-zA-Z0-9]+/)[0].replace('(','').split(',')
+        var requestedFunction = {},
+            colour,
+            amount,
+            newVal;
+
+        css.walkRules(function(rule) {
+            rule.walkDecls(function(decl, i) {
+                var val = decl.value;
+
+                for (var i = 0; i < functions.length; i++) {
+                    if (val.indexOf(functions[i]) !== -1) {
+                        var regex = new RegExp(functions[i]+"\\([a-zA-Z0-9\\)\\.\\#\\,\\s\\%]+");
+                        
+                        requestedFunction = {
+                            'function': functions[i],
+                            'request': val.match(regex)[0]
+                                          .replace('(', '')
+                                          .replace(')', '')
+                                          .replace(functions[i], '')
+                                          .split(',')
                         };
                         break;
                     }
                 }
-                
-                console.log('requestFunction', requestedFunction);
-                
-                if (requestedFunction['request'][0].indexOf('#') != -1){
-                    colour = hexToRgb(requestedFunction['request'][0]);
-                    amount = requestedFunction['request'][1];
-                }else if (requestedFunction['request'][0].indexOf('rgb(') != -1){
-                    colour = stripRgb(requestedFunction['request']);
-                    amount = requestedFunction['request'][3];
-                }else{
-                    throw new Error('Colour entry must be in RGB or a hex code value');
+
+                if (requestedFunction['request'] !== undefined){
+                    if (requestedFunction['request'][0].indexOf('#') != -1) {
+                        colour = hexToRgb(requestedFunction['request'][0]);
+                        amount = requestedFunction['request'][1];
+                    } else if (requestedFunction['request'][0].indexOf('rgb(') != -1) {
+                        colour = stripRgb(requestedFunction['request']);
+                        amount = requestedFunction['request'][3];
+                    } else {
+                        throw new Error('Colour entry must be in RGB or a hex code value');
+                    }
+
+                    if (requestedFunction['function'] == 'darken') {
+                        newVal = 'rgb(' + darkenColour(colour, amount).join(',') + ')';
+                    } else
+                    if (requestedFunction['function'] == 'lighten') {
+                        newVal = 'rgb(' + lightenColour(colour, amount).join(',') + ')';
+                    } else
+                    if (requestedFunction['function'] == 'opacity') {
+                        newVal = opacityColour(colour, amount);
+                    }
+                    
+                    decl.value = newVal;
+                    requestedFunction = {};
                 }
-                
-                if (requestedFunction['function'] == 'darken'){
-                    console.log()
-                    newVal = 'rgb(' + darkenColour(colour, amount).join(',') + ')';
-                }else
-                if (requestedFunction['function'] == 'lighten'){
-                    newVal = 'rgb(' + lightenColour(colour, amount).join(',') + ')';
-                }else
-                if (requestedFunction['function'] == 'opacity'){
-                    newVal = opacityColour(colour, amount);
-                }
-                
-                decl.value = newVal;
             });
         });
- 
+
     }
- 
+
 });
