@@ -1,0 +1,5 @@
+.x {
+    color: darken(#41961b, 10%);
+    background: lighten(#663399, 0.5);
+    border: 1px solid opacity(rgb(0, 0, 255), 10%);
+}
