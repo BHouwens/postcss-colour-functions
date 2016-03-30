@@ -60,15 +60,21 @@ module.exports = postcss.plugin('postcss-colour-functions', function myplugin(op
                     requestedFunction,
                     newVal;
                 
+                console.log(functions);
+                
                 for (var i = 0; i < functions.length; i++){
                     if (val.indexOf(functions[i] + '(') != -1){
+                        console.log('value', val);
+                        console.log('function', functions[i]);
                         requestedFunction = { 
                             'function' : functions[i],
-                            'request': val.match(/\([\(\)\.\#\,\s\%a-z0-9]+/)[0].replace('(','').split(',')
+                            'request': val.match(/\([\(\)\.\#\,\s\%a-zA-Z0-9]+/)[0].replace('(','').split(',')
                         };
                         break;
                     }
                 }
+                
+                console.log('requestFunction', requestedFunction);
                 
                 if (requestedFunction['request'][0].indexOf('#') != -1){
                     colour = hexToRgb(requestedFunction['request'][0]);
@@ -81,6 +87,7 @@ module.exports = postcss.plugin('postcss-colour-functions', function myplugin(op
                 }
                 
                 if (requestedFunction['function'] == 'darken'){
+                    console.log()
                     newVal = 'rgb(' + darkenColour(colour, amount).join(',') + ')';
                 }else
                 if (requestedFunction['function'] == 'lighten'){
