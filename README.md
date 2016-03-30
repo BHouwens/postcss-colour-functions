@@ -4,6 +4,8 @@
 
 PostCSS plugin for Sass-like colour functions.
 
+.. 
+
 ## Install
 
     npm install postcss-colour-functions --save
@@ -11,6 +13,8 @@ PostCSS plugin for Sass-like colour functions.
 Then just require it in whatever task runner you prefer like so:
 
     var colourFunctions = require('postcss-colour-functions');
+
+..
 
 ## Colour Functions
 
@@ -67,6 +71,8 @@ Specify an opacity for a given colour. This returns an `rgba` value:
         color: rgba(0,136,187,0.2);
     }
     
+..
+
 ## License
 
 MIT
