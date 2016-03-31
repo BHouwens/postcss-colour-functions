@@ -20,25 +20,37 @@ function hexToRgb(hex) {
 }
 
 function stripRgb(rgb) {
-    return {
-        r: rgb[0].replace('rgb(', ''),
+    var returnRgb = {
+        r: rgb[0].replace(/rgba*\(*/, ''),
         g: rgb[1].replace(' ', ''),
-        b: rgb[2].replace(')', '')
+        b: rgb[2].replace(/[\s\)]/g, '')
     }
+    
+    if (rgb.length == 5){
+        returnRgb['a'] = rgb[3].replace(/\s/g, '');
+    }
+    
+    return returnRgb; 
 }
 
 function darkenColour(colour, amount) {
     amount = amount.indexOf('%') != -1 ? parseFloat(amount.replace('%', '')) / 100 : parseFloat(amount);
-    return [parseFloat(colour['r'] * amount).toFixed(2),
-        parseFloat(colour['g'] * amount).toFixed(2),
-        parseFloat(colour['b'] * amount).toFixed(2)];
+    var returnArr = [(parseFloat(colour['r']) * amount).toFixed(2),
+                     (parseFloat(colour['g']) * amount).toFixed(2),
+                     (parseFloat(colour['b']) * amount).toFixed(2)];
+    
+    if (colour.hasOwnProperty('a')) returnArr.push(parseFloat(colour['a']))
+    return returnArr;
 }
 
 function lightenColour(colour, amount) {
     amount = amount.indexOf('%') != -1 ? parseFloat(amount.replace('%', '')) / 100 : parseFloat(amount);
-    return [parseFloat(colour['r'] + (amount * (255 - colour['r']))).toFixed(2),
-        parseFloat(colour['g'] + (amount * (255 - colour['g']))).toFixed(2),
-        parseFloat(colour['b'] + (amount * (255 - colour['b']))).toFixed(2)];
+    var returnArr = [( parseFloat(colour['r']) + ( amount * (255 - parseFloat(colour['r'])) ) ).toFixed(2),
+                     ( parseFloat(colour['g']) + ( amount * (255 - parseFloat(colour['g'])) ) ).toFixed(2),
+                     ( parseFloat(colour['b']) + ( amount * (255 - parseFloat(colour['b'])) ) ).toFixed(2)];
+                     
+    if (colour.hasOwnProperty('a')) returnArr.push(parseFloat(colour['a']))
+    return returnArr;
 }
 
 function opacityColour(colour, amount) {
@@ -66,25 +78,30 @@ module.exports = postcss.plugin('postcss-colour-functions', function myplugin(op
                         
                         requestedFunction = {
                             'function': i,
-                            'request': val.match(regex)[0]
-                                          .replace('(', '')
-                                          .replace(')', '')
+                            'request': val.match(regex)['input']
+                                          .replace(/\(/g, '')
+                                          .replace(/\)/g, '')
                                           .replace(i, '')
-                                          .split(',')
+                                          .split(',') 
                         };
                         
                         if (requestedFunction['request'] !== undefined){
                             if (requestedFunction['request'][0].indexOf('#') != -1) {
                                 colour = hexToRgb(requestedFunction['request'][0]);
                                 amount = requestedFunction['request'][1];
-                            } else if (requestedFunction['request'][0].indexOf('rgb(') != -1) {
+                            } else if (requestedFunction['request'][0].indexOf('rgb') != -1) {
                                 colour = stripRgb(requestedFunction['request']);
-                                amount = requestedFunction['request'][3];
+                                amount = requestedFunction['request'][requestedFunction['request'].length - 1];
                             } else {
                                 throw new Error('Colour entry must be in RGB or a hex code value');
                             }
                             
-                            newVal = 'rgb(' + functions[i](colour, amount).join(',') + ')';
+                            if (functions[i] == opacityColour){
+                                newVal = 'rgba(' + functions[i](colour, amount).join(',') + ')';
+                            }else{
+                                newVal = 'rgb(' + functions[i](colour, amount).join(',') + ')';
+                            }
+                            
                             decl.value = newVal;
                             requestedFunction = {};
                         }
