@@ -18,7 +18,7 @@ Then just require it in whatever task runner you prefer like so:
 
 ## Colour Functions
 
-The plugin expects colours to be entered in either RGB or hexidecimal format. No HSL or RGBA is usable as yet. 
+The plugin expects colours to be entered in either RGB/A or hexidecimal format. No HSL is usable as yet. 
 
 ### darken
 
