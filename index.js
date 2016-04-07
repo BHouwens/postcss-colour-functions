@@ -96,7 +96,7 @@ module.exports = postcss.plugin('postcss-colour-functions', function myplugin(op
                                 throw new Error('Colour entry must be in RGB or a hex code value');
                             }
                             
-                            if (functions[i] == opacityColour){
+                            if (functions[i] == opacityColour || colour.hasOwnProperty('a')){
                                 newVal = 'rgba(' + functions[i](colour, amount).join(',') + ')';
                             }else{
                                 newVal = 'rgb(' + functions[i](colour, amount).join(',') + ')';
