@@ -35,9 +35,9 @@ function stripRgb(rgb) {
 
 function darkenColour(colour, amount) {
     amount = amount.indexOf('%') != -1 ? parseFloat(amount.replace('%', '')) / 100 : parseFloat(amount);
-    var returnArr = [Math.round(parseFloat(colour['r']) * amount),
-                     Math.round(parseFloat(colour['g']) * amount),
-                     Math.round(parseFloat(colour['b']) * amount)];
+    var returnArr = [Math.round(parseFloat(colour['r']) * (1 - amount)),
+                     Math.round(parseFloat(colour['g']) * (1 - amount)),
+                     Math.round(parseFloat(colour['b']) * (1 - amount))];
     
     if (colour.hasOwnProperty('a')) returnArr.push(parseFloat(colour['a']))
     return returnArr;
