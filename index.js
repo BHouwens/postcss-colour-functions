@@ -35,9 +35,9 @@ function stripRgb(rgb) {
 
 function darkenColour(colour, amount) {
     amount = amount.indexOf('%') != -1 ? parseFloat(amount.replace('%', '')) / 100 : parseFloat(amount);
-    var returnArr = [(parseFloat(colour['r']) * amount).toFixed(2),
-                     (parseFloat(colour['g']) * amount).toFixed(2),
-                     (parseFloat(colour['b']) * amount).toFixed(2)];
+    var returnArr = [Math.round(parseFloat(colour['r']) * amount),
+                     Math.round(parseFloat(colour['g']) * amount),
+                     Math.round(parseFloat(colour['b']) * amount)];
     
     if (colour.hasOwnProperty('a')) returnArr.push(parseFloat(colour['a']))
     return returnArr;
@@ -45,9 +45,9 @@ function darkenColour(colour, amount) {
 
 function lightenColour(colour, amount) {
     amount = amount.indexOf('%') != -1 ? parseFloat(amount.replace('%', '')) / 100 : parseFloat(amount);
-    var returnArr = [( parseFloat(colour['r']) + ( amount * (255 - parseFloat(colour['r'])) ) ).toFixed(2),
-                     ( parseFloat(colour['g']) + ( amount * (255 - parseFloat(colour['g'])) ) ).toFixed(2),
-                     ( parseFloat(colour['b']) + ( amount * (255 - parseFloat(colour['b'])) ) ).toFixed(2)];
+    var returnArr = [Math.round( parseFloat(colour['r']) + ( amount * (255 - parseFloat(colour['r'])) ) ),
+                     Math.round( parseFloat(colour['g']) + ( amount * (255 - parseFloat(colour['g'])) ) ),
+                     Math.round( parseFloat(colour['b']) + ( amount * (255 - parseFloat(colour['b'])) ) )];
                      
     if (colour.hasOwnProperty('a')) returnArr.push(parseFloat(colour['a']))
     return returnArr;
