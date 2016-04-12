@@ -1,9 +1,25 @@
-var postcss = require('postcss'),
-    functions = {
+var postcss = require('postcss');
+
+var functions = {
         'darken': darkenColour,
         'lighten': lightenColour,
         'opacity': opacityColour
     };
+    
+var colourCodes = {
+        'blue': '#F0F8FF',
+        'black': '#000',
+        'red': '#FF0000',
+        'orange': '#FFA500',
+        'yellow': '#FFFF00',
+        'white': '#FFF',
+        'green': '#008000',
+        'pink': '#FFC0CB',
+        'purple': '#800080',
+        'cyan': '#00FFFF',
+        'darkgrey': '#A9A9A9',
+        'darkgray': '#A9A9A9'
+    };  
 
 function hexToRgb(hex) {
     var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -86,12 +102,27 @@ module.exports = postcss.plugin('postcss-colour-functions', function myplugin(op
                         };
                         
                         if (requestedFunction['request'] !== undefined){
-                            if (requestedFunction['request'][0].indexOf('#') != -1) {
-                                colour = hexToRgb(requestedFunction['request'][0]);
+                            var possibleColour = requestedFunction['request'][0];
+                            
+                            if (possibleColour.indexOf('#') != -1) {
+                                
+                                colour = hexToRgb(possibleColour);
                                 amount = requestedFunction['request'][1];
-                            } else if (requestedFunction['request'][0].indexOf('rgb') != -1) {
+                                
+                            } else if (possibleColour.indexOf('rgb') != -1) {
+                                
                                 colour = stripRgb(requestedFunction['request']);
                                 amount = requestedFunction['request'][requestedFunction['request'].length - 1];
+                                
+                            } else if (possibleColour.match(/[a-z]+/i) !== undefined){
+                                
+                                if (colourCodes.hasOwnProperty(possibleColour)){
+                                    colour = hexToRgb(colourCodes[possibleColour]);
+                                    amount = requestedFunction['request'][1];
+                                }else{
+                                    throw new Error('No colour code found for ' + possibleColour +'. Are you trying to use a CSS colour code?');
+                                }
+                                
                             } else {
                                 throw new Error('Colour entry must be in RGB or a hex code value');
                             }
