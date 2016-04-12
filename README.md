@@ -13,7 +13,7 @@ PostCSS plugin for Sass-like colour functions.
 Then just require it in whatever task runner you prefer like so:
 
 ```javascript
-    var colourFunctions = require('postcss-colour-functions');
+var colourFunctions = require('postcss-colour-functions');
 ```
 
 ..
