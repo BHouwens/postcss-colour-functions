@@ -55,7 +55,7 @@ function darkenColour(colour, amount) {
                      Math.round(parseFloat(colour['g']) * (1 - amount)),
                      Math.round(parseFloat(colour['b']) * (1 - amount))];
     
-    if (colour.hasOwnProperty('a')) returnArr.push(parseFloat(colour['a']))
+    if (colour.hasOwnProperty('a')) returnArr.push(parseFloat(colour['a']));
     return returnArr;
 }
 
@@ -65,7 +65,7 @@ function lightenColour(colour, amount) {
                      Math.round( parseFloat(colour['g']) + ( amount * (255 - parseFloat(colour['g'])) ) ),
                      Math.round( parseFloat(colour['b']) + ( amount * (255 - parseFloat(colour['b'])) ) )];
                      
-    if (colour.hasOwnProperty('a')) returnArr.push(parseFloat(colour['a']))
+    if (colour.hasOwnProperty('a')) returnArr.push(parseFloat(colour['a']));
     return returnArr;
 }
 
@@ -120,11 +120,12 @@ module.exports = postcss.plugin('postcss-colour-functions', function myplugin(op
                                     colour = hexToRgb(colourCodes[possibleColour]);
                                     amount = requestedFunction['request'][1];
                                 }else{
-                                    throw new Error('No colour code found for ' + possibleColour +'. Are you trying to use a CSS colour code?');
+                                    var errorMessage = 'POSTCSS-COLOUR-FUNCTIONS: No colour code found for ' + possibleColour +'. Are you trying to use a CSS colour code?';
+                                    throw new Error(errorMessage);
                                 }
                                 
                             } else {
-                                throw new Error('Colour entry must be in RGB or a hex code value');
+                                throw new Error('POSTCSS-COLOUR-FUNCTIONS: Colour entry must be in RGB or a hex code value');
                             }
                             
                             if (functions[i] == opacityColour || colour.hasOwnProperty('a')){

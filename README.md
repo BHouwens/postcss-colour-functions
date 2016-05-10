@@ -34,7 +34,7 @@ Darkens a colour by a specific amount, specified either as a decimal or percenta
     
 /* becomes this */
 .element{
-    color: rgb(0,27.20,37);
+    color: rgb(0,0,150);
 }
 ```
 
@@ -50,7 +50,7 @@ The same as `darken`, except it tints the colour as opposed to shading it:
     
 /* becomes this */
 .element{
-    color: rgb(51,159,200);
+    color: rgb(51,51,201);
 }
 ```
     
@@ -66,7 +66,7 @@ Specify an opacity for a given colour. This returns an `rgba` value:
 
 /* becomes this */
 .element{
-    color: rgba(0,136,187,0.2);
+    color: rgba(0,0,187,0.2);
 }
 ```
     
