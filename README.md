@@ -1,6 +1,7 @@
 # postcss-colour-functions
 
 [![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)]()
+[![downloads](https://img.shields.io/badge/downloads-500%2FM-green.svg)]()
 
 PostCSS plugin for Sass-like colour functions.
 
