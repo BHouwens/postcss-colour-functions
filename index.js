@@ -91,6 +91,8 @@ module.exports = postcss.plugin('postcss-colour-functions', function myplugin(op
                 for (var i in functions) {
                     if (val.indexOf(i) !== -1) {
                         var regex = new RegExp(i+"\\([a-zA-Z0-9\\)\\.\\#\\,\\s\\%]+");
+                        var match = val.match(regex);
+                        if (!match) continue;
                         
                         requestedFunction = {
                             'function': i,
