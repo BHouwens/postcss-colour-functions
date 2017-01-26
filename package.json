@@ -4,9 +4,15 @@
   "description": "PostCSS plugin with some useful, Sass-like colour functions",
   "author": "Byron Houwens",
   "license": "MIT",
+  "repository": "BHouwens/postcss-colour-functions",
+  "bugs": {
+    "url": "https://github.com/BHouwens/postcss-colour-functions/issues"
+  },
   "keywords": [
     "postcss",
-    "sass"
+    "sass",
+    "css",
+    "postcss-plugin"
   ],
   "dependencies": {
     "postcss": "^5.0.19"
