@@ -1,10 +1,10 @@
 {
-  "name": "postcss-colour-functions",
-  "version": "1.5.2",
+  "name": "postcss6-colour-functions",
+  "version": "1.5.3",
   "description": "PostCSS plugin with some useful, Sass-like colour functions",
-  "author": "Byron Houwens",
+  "author": "Sergey Kurdin",
   "license": "MIT",
-  "repository": "BHouwens/postcss-colour-functions",
+  "repository": "kurdin/postcss6-colour-functions",
   "bugs": {
     "url": "https://github.com/BHouwens/postcss-colour-functions/issues"
   },
@@ -15,6 +15,6 @@
     "postcss-plugin"
   ],
   "dependencies": {
-    "postcss": "^5.0.19"
+    "postcss": "^6.0.22"
   }
 }
